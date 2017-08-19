@@ -1,8 +1,8 @@
 #ifndef _NGX_EXCEPTION_HPP
 #define _NGX_EXCEPTION_HPP
 
-#include <Nginx.hpp>
-#include <NgxCppInc.hpp>
+#include "Nginx.hpp"
+#include "NgxCppInc.hpp"
 
 // 异常类
 class NgxException final : public virtual std::exception,
