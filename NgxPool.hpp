@@ -1,8 +1,8 @@
 #ifndef _NGX_POOL_HPP
 #define _NGX_POOL_HPP
 
-#include <Nginx.hpp>
-#include <NgxCppInc.hpp>
+#include "Nginx.hpp"
+#include "NgxCppInc.hpp"
 #include "NgxWrapper.hpp"		// 基本包装类
 #include "NgxException.hpp"		// 异常类
 
