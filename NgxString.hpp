@@ -1,8 +1,8 @@
 #ifndef _NGX_STRING_HPP
 #define _NGX_STRING_HPP
 
-#include <Nginx.hpp>
-#include <NgxCppInc.hpp>
+#include "Nginx.hpp"
+#include "NgxCppInc.hpp"
 #include "NgxWrapper.hpp"
 
 class NgxString final : public NgxWrapper<ngx_str_t>
