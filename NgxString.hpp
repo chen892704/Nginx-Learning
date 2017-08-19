@@ -5,14 +5,14 @@
 #include "NgxCppInc.hpp"
 #include "NgxWrapper.hpp"
 
-// ×Ö·û´®Àà
+// å­—ç¬¦ä¸²ç±»
 class NgxString final : public NgxWrapper<ngx_str_t>
 {
 public:
 	typedef NgxWrapper<ngx_str_t>	super_type;
-	typedef NgxString				this_type;
+	typedef NgxString		this_type;
 	
-	typedef boost::string_ref		string_ref_type;	// char* ×Ö·û´®ÒıÓÃÀàĞÍ
+	typedef boost::string_ref	string_ref_type;	// char* å­—ç¬¦ä¸²å¼•ç”¨ç±»å‹
 	
 public:
 	NgxString(ngx_str_t & str) : super_type(str) {}
@@ -20,33 +20,33 @@ public:
 	~NgxString() = default;
 	
 public:
-	const char * data() const							// »ñÈ¡×Ö·û´®
+	const char * data() const				// è·å–å­—ç¬¦ä¸²
 	{
 		return reinterpret_cast<const char*>(get()->data);
 	}
 	
-	std::size_t size() const							// »ñÈ¡³¤¶È
+	std::size_t size() const				// è·å–é•¿åº¦
 	{
 		return get()->len;
 	}
 	
-	bool empty() const									// ÊÇ·ñÎª¿Õ´®
+	bool empty() const					// æ˜¯å¦ä¸ºç©ºä¸²
 	{
 		return !get()->data || !get()->len;
 	}
 	
-	string_ref_type str() const							// ×ª»»Îª char* ×Ö·û´®ĞÎÊ½
+	string_ref_type str() const				// è½¬æ¢ä¸º char* å­—ç¬¦ä¸²å½¢å¼
 	{
 		return string_ref_type(data(), size());
 	}
 	
 public:
-	operator ngx_int_t () const							// ×Ö·û´®×ªÕûÊıÀàĞÍ
+	operator ngx_int_t () const				// å­—ç¬¦ä¸²è½¬æ•´æ•°ç±»å‹
 	{
 		return ngx_atoi(get()->data, get()->len);
 	}
 	
-	// ÖØÔØ±È½Ï²Ù×÷·û£¬´óĞ¡Ğ´Ãô¸Ğ±È½ÏÁ½¸ö ngx_str_t ¶ÔÏó
+	// é‡è½½æ¯”è¾ƒæ“ä½œç¬¦ï¼Œå¤§å°å†™æ•æ„Ÿæ¯”è¾ƒä¸¤ä¸ª ngx_str_t å¯¹è±¡
 	friend bool operator==(const this_type & l, const this_type & r)
 	{
 		return l.size() == r.size() &&
@@ -54,19 +54,19 @@ public:
 	}
 	
 	template<typename ... Args>
-	void printf(const Args & ... args) const			// °²È«¸ñÊ½»¯
+	void printf(const Args & ... args) const		// å®‰å…¨æ ¼å¼åŒ–
 	{
 		auto p = ngx_snprintf(get()->data, get()->len, args ...);
 		
-		// ¼ÆËãÊµ¼Ê³¤¶È
+		// è®¡ç®—å®é™…é•¿åº¦
 		get()->len = static_cast<std::size_t>(p - get()->data);
 	}
 	
 public:
 	template<typename T>
-	friend T & operator<<(T & o, const this_type & s)	// ÖØÔØÁ÷Êä³ö²Ù×÷·û
+	friend T & operator<<(T & o, const this_type & s)	// é‡è½½æµè¾“å‡ºæ“ä½œç¬¦
 	{
-		o.write(s.data(), s.size());					// °Ñ×Ö·û´®Ğ´ÈëÁ÷
+		o.write(s.data(), s.size());			// æŠŠå­—ç¬¦ä¸²å†™å…¥æµ
 		return o;
 	}
 };
