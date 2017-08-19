@@ -3,21 +3,21 @@
 
 #include "Nginx.hpp"
 #include "NgxCppInc.hpp"
-#include "NgxWrapper.hpp"		// åŸºæœ¬åŒ…è£…ç±»
-#include "NgxException.hpp"		// å¼‚å¸¸ç±»
+#include "NgxWrapper.hpp"			// »ù±¾°ü×°Àà
+#include "NgxException.hpp"			// Òì³£Àà
 
-// å°è£…äº†Nginxçš„å†…å­˜æ± 
+// ·â×°ÁËNginxµÄÄÚ´æ³Ø
 class NgxPool final : public NgxWrapper<ngx_pool_t>
 {
 public:
-	typedef NgxWrapper<ngx_pool_t> 	super_type;		// ç®€åŒ–ç±»å‹å®šä¹‰
-	typedef NgxPool			this_type;
+	typedef NgxWrapper<ngx_pool_t> 	super_type;		// ¼ò»¯ÀàĞÍ¶¨Òå
+	typedef NgxPool					this_type;
 	
 public:
 	NgxPool(ngx_pool_t * p) : super_type(p) {}
 	
-	template<typename T>					// æ¨¡æ¿å‚æ•°Tå¯ä»¥æ˜¯ ngx_http_request_tã€ngx_conf_t
-	NgxPool(T * x) : Nginx(x->pool) {}			// ç­‰å«æœ‰poolæˆå‘˜çš„ç»“æ„
+	template<typename T>							// Ä£°å²ÎÊıT¿ÉÒÔÊÇ ngx_http_request_t¡¢ngx_conf_t
+	NgxPool(T * x) : Nginx(x->pool) {}				// µÈº¬ÓĞpool³ÉÔ±µÄ½á¹¹
 
 	~NgxPool() = default;
 	
@@ -25,75 +25,75 @@ public:
 	template<typename T, bool no_exception = false>
 	T * palloc() const
 	{
-		auto p = ngx_pcalloc(get(), sizeof(T));		// åˆ†é…å†…å­˜
+		auto p = ngx_pcalloc(get(), sizeof(T));		// ·ÖÅäÄÚ´æ
 		
-		if(!p)						// æ£€æŸ¥ç©ºæŒ‡é’ˆ
+		if(!p)										// ¼ì²é¿ÕÖ¸Õë
 		{
-			if(no_exception)			// æ˜¯å¦å…è®¸æŠ›å‡ºå¼‚å¸¸
+			if(no_exception)						// ÊÇ·ñÔÊĞíÅ×³öÒì³£
 			{
 				return nullptr;
 			}
 			
-			NgxException::raise();			// æŠ›å‡ºå¼‚å¸¸
+			NgxException::raise();					// Å×³öÒì³£
 		}
 		
 		assert(p);
-		return new (p) T();				// æ„é€ Tå¯¹è±¡
+		return new (p) T();							// ¹¹ÔìT¶ÔÏó
 	}
 	
 	template<typename T>
-	T * alloc() const					// æŠ›å¼‚å¸¸ç‰ˆæœ¬
+	T * alloc() const								// Å×Òì³£°æ±¾
 	{
 		return palloc<T, false>();
 	}
 	
 	template<typename T>
-	T * alloc_noexcept() const				// ä¸æŠ›å¼‚å¸¸ç‰ˆæœ¬
+	T * alloc_noexcept() const						// ²»Å×Òì³£°æ±¾
 	{
 		return palloc<T, true>();
 	}
 	
 	template<typename T>
-	T * nalloc(std::size_t n) const				// åˆ†é…nä¸ªå­—èŠ‚å†…å­˜
+	T * nalloc(std::size_t n) const					// ·ÖÅän¸ö×Ö½ÚÄÚ´æ
 	{
 		auto p = ngx_pnalloc(get(), n);
 		
-		NgxException::require(p);			// æ£€æŸ¥ç©ºæŒ‡é’ˆ
+		NgxException::require(p);					// ¼ì²é¿ÕÖ¸Õë
 		
-		return reinterpret_cast<T*>(p);			// è½¬å‹ä¸ºT*
+		return reinterpret_cast<T*>(p);				// ×ªĞÍÎªT*
 	}
 	
 	template<typename T, typename ... Args)
-	T * construct(const Args & ... args) const		// ä»»æ„æ•°é‡å‚æ•°æ„é€ å¯¹è±¡
+	T * construct(const Args & ... args) const		// ÈÎÒâÊıÁ¿²ÎÊı¹¹Ôì¶ÔÏó
 	{
 		auto p = ngx_pcalloc(get(), sizeof(T));
 		
 		NgxException::require(p);
 		
-		return new (p) T(args ...);			// è½¬å‘å‚æ•°æ„é€ 
+		return new (p) T(args ...);					// ×ª·¢²ÎÊı¹¹Ôì
 	}
 	
 public:
 	template<typename F, typename T>
 	ngx_pool_cleanup_t * cleanup(F func, T * data, std::size_t size = 0) const
 	{
-		auto p = ngx_pool_cleanup_add(get(), size);	// è°ƒç”¨Nginxçš„cleanup_add
+		auto p = ngx_pool_cleanup_add(get(), size);	// µ÷ÓÃNginxµÄcleanup_add
 		NgxException::require(p);
 		
-		p->handler = func;				// è®¾ç½®æ¸…ç†å‡½æ•°
+		p->handler = func;							// ÉèÖÃÇåÀíº¯Êı
 		
-		if(data)					// å…è®¸ç›´æ¥ä¼ å…¥å¾…é‡Šæ”¾çš„èµ„æº
+		if(data)									// ÔÊĞíÖ±½Ó´«Èë´ıÊÍ·ÅµÄ×ÊÔ´
 		{
 			p->data = data;
 		}
 		
-		return p;					// è¿”å›æ¸…ç†ä¿¡æ¯å¯¹è±¡
+		return p;									// ·µ»ØÇåÀíĞÅÏ¢¶ÔÏó
 	}
 	
 	template<typename T>
-	static void destroy(void * p)				// é€‚é…ææ„å‡½æ•°ç¬¦åˆNginxè¦æ±‚
+	static void destroy(void * p)					// ÊÊÅäÎö¹¹º¯Êı·ûºÏNginxÒªÇó
 	{
-		(reinterpret_cast<T*>(p))->~T();		// è½¬æ¢ void*ï¼Œè°ƒç”¨å¯¹åº”ææ„å‡½æ•°
+		(reinterpret_cast<T*>(p))->~T();			// ×ª»» void*£¬µ÷ÓÃ¶ÔÓ¦Îö¹¹º¯Êı
 	}
 	
 	template<typename T>
@@ -103,55 +103,23 @@ public:
 	}
 	
 public:
-	ngx_str_t dup(ngx_str_t & str) const			// å¤åˆ¶å­—ç¬¦ä¸²
+	ngx_str_t dup(ngx_str_t & str) const			// ¸´ÖÆ×Ö·û´®
 	{
-		ngx_str_t tmp;					// å‡†å¤‡è¿”å›çš„å­—ç¬¦ä¸²
+		ngx_str_t tmp;								// ×¼±¸·µ»ØµÄ×Ö·û´®
 		
-		tmp.len  = str.len;				// è®¾ç½®å­—ç¬¦ä¸²é•¿åº¦
-		tmp.data = ngx_pstrdup(get(), &str); 		// å†…å­˜æ± å¤åˆ¶å­—ç¬¦ä¸²
+		tmp.len  = str.len;							// ÉèÖÃ×Ö·û´®³¤¶È
+		tmp.data = ngx_pstrdup(get(), &str); 		// ÄÚ´æ³Ø¸´ÖÆ×Ö·û´®
 		
-		NgxException::require(tmp.data);		// æ£€æŸ¥ç©ºæŒ‡é’ˆ
-		return tmp;					// è¿”å›å¤åˆ¶çš„å­—ç¬¦ä¸²
+		NgxException::require(tmp.data);			// ¼ì²é¿ÕÖ¸Õë
+		return tmp;									// ·µ»Ø¸´ÖÆµÄ×Ö·û´®
 	}
 	
-	ngx_str_t dup(boost::string_ref str) const		// å¤åˆ¶æ™®é€šå­—ç¬¦ä¸²
+	ngx_str_t dup(boost::string_ref str) const		// ¸´ÖÆÆÕÍ¨×Ö·û´®
 	{
 		ngx_str_t tmp{ str.size(), (u_char*)str.data() };
 		
 		return dup(tmp);
 	}
-}
-
-
-// å†…å­˜é…ç½®å™¨
-template<typename T>
-class NgxAlloctor : public NgxWrapper<ngx_pool_t>
-{
-public:
-	typedef NgxWrapper<ngx_pool_t>	super_type;		// ç®€åŒ–ç±»å‹å®šä¹‰
-	typedef NgxAlloctor		this_type;
-	
-public:
-	typedef std::size_t	size_type;			// å†…éƒ¨ç±»å‹å®šä¹‰
-	typedef T*		pointer;
-	typedef T		value_type;
-	
-public:
-	NgxAlloctor(ngx_pool_t * p) : super_type(p) {}
-	
-	~NgxAlloctor() = default;
-	
-	pointer allocate(size_type n)				// åˆ†é…nä¸ªå…ƒç´ æ‰€éœ€çš„å†…å­˜
-	{
-		return reinterpret_cast<pointer>(		// ä½¿ç”¨Nginxå†…å­˜æ± 
-					ngx_pnalloc(get(), n * sizeof(T)));
-	}
-	
-	void deallocate(pointer ptr, size_type n)		// é‡Šæ”¾å†…å­˜ï¼Œç”±Nginxè´Ÿè´£å†…å­˜å›æ”¶
-	{
-		boost::ignore_unused(n);			// å¿½ç•¥å‡ºå£å‚æ•°n
-		ngx_pfree(get(), ptr);				// å½’è¿˜å†…å­˜æ± 
-	}
-}
+};
 
 #endif

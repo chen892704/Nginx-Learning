@@ -4,32 +4,32 @@
 #include "Nginx.hpp"
 #include "NgxCppInc.hpp"
 
-// å¼‚å¸¸ç±»
+// Òì³£Àà
 class NgxException final : public virtual std::exception,
-			   public virtual boost::exception
+						   public virtual boost::exception
 {
 public:
 	typedef boost::string_ref string_ref_type;
 	
 private:
-	ngx_int_t		m_code = NGX_ERROR;		// é”™è¯¯ä»£ç 
-	std::string		m_msg;				// é”™è¯¯ä¿¡æ¯
+	ngx_int_t		m_code = NGX_ERROR;		// ´íÎó´úÂë
+	std::string		m_msg;					// ´íÎóĞÅÏ¢
 	
 public:
 	NgxException(ngx_int_t x, string_ref_type msg):
-			m_code(x), m_msg(msg) {}
+					m_code(x), m_msg(msg) {}
 				 
 	NgxException(ngx_int_t x = NGX_ERROR):
-			NgxException(x, "") {}			// å§”æ‰˜æ„é€ 
+			NgxException(x, "") {}			// Î¯ÍĞ¹¹Ôì
 			
 	NgxException(string_ref_type msg):
-			NgxException(NGX_ERROR, msg)		// å§”æ‰˜æ„é€ 
+			NgxException(NGX_ERROR, msg)	// Î¯ÍĞ¹¹Ôì
 			
-	virtual ~NgxException() noexcept			// è™šææ„å‡½æ•°
+	virtual ~NgxException() noexcept		// ĞéÎö¹¹º¯Êı
 	{}
 	
 public:
-	ngx_int_t code() const					// è·å–é”™è¯¯ç 
+	ngx_int_t code() const					// »ñÈ¡´íÎóÂë
 	{
 		return m_code; 
 	}
@@ -42,38 +42,38 @@ public:
 public:
 	static void raise(ngx_int_t rc = NGX_ERROR, string_ref_type msg = "")
 	{
-		throw NgxException(rc, msg);			// æŠ›å‡ºå¼‚å¸¸
+		throw NgxException(rc, msg);		// Å×³öÒì³£
 	}
 	
-	// æ£€æŸ¥æ¡ä»¶æ˜¯å¦æ»¡è¶³
+	// ¼ì²éÌõ¼şÊÇ·ñÂú×ã
 	static void require(bool cond, ngx_int_t e = NGX_ERROR)
 	{
-		if(!cond)					// å¦‚æœä¸ç¬¦åˆé¢„æœŸåˆ™æŠ›å‡ºå¼‚å¸¸
+		if(!cond)							// Èç¹û²»·ûºÏÔ¤ÆÚÔòÅ×³öÒì³£
 		{
 			raise(e);
 		}
 	}
 	
-	// æ£€æŸ¥é”™è¯¯ç ï¼Œé»˜è®¤è¦æ±‚æ˜¯NGX_OK
+	// ¼ì²é´íÎóÂë£¬Ä¬ÈÏÒªÇóÊÇNGX_OK
 	static void require(ngx_int_t rc, ngx_int_t x = NGX_OK)
 	{
-		require(rc == x, rc);				// å¦‚æœä¸æ˜¯OKåˆ™æŠ›å‡ºå¼‚å¸¸
+		require(rc == x, rc);				// Èç¹û²»ÊÇOKÔòÅ×³öÒì³£
 	}
 	
-	// æ£€æŸ¥ç©ºæŒ‡é’ˆï¼Œè¦æ±‚æŒ‡é’ˆéç©º
+	// ¼ì²é¿ÕÖ¸Õë£¬ÒªÇóÖ¸Õë·Ç¿Õ
 	static void require(T * p, ngx_int_t e = NGX_ERROR)
 	{
-		require(p != nullptr, e);			// å¦‚æœæ˜¯ç©ºæŒ‡é’ˆåˆ™æŠ›å‡ºå¼‚å¸¸
+		require(p != nullptr, e);			// Èç¹ûÊÇ¿ÕÖ¸ÕëÔòÅ×³öÒì³£
 	}
 	
-	// require çš„åå‡½æ•°
+	// require µÄ·´º¯Êı
 	static void fail(bool cond, ngx_int_t e = NGX_ERROR)
 	{
 		if(cond)
 		{
-			raise(e);				// å¦‚æœç¬¦åˆé¢„æœŸåˆ™æŠ›å‡ºå¼‚å¸¸
+			raise(e);						// Èç¹û·ûºÏÔ¤ÆÚÔòÅ×³öÒì³£
 		}
 	}
-}
+};
 
 #endif
