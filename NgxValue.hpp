@@ -1,8 +1,8 @@
 #ifndef _NGX_VALUE_HPP
 #define _NGX_VALUE_HPP
 
-#include <Nginx.hpp>
-#include <NgxCppInc.hpp>
+#include "Nginx.hpp"
+#include "NgxCppInc.hpp"
 
 // 无效值的封装
 class NgxUnsetValue final				// final 禁止被继承
