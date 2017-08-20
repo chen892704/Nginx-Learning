@@ -1,9 +1,9 @@
 #ifndef _NGX_WRAPPER_HPP
 #define _NGX_WRAPPER_HPP
 
-#include <boost/type_traits.hpp>	// Ê¹ÓÃ type_traits Ôªº¯Êı¼ÆËãÀàĞÍ
+#include <boost/type_traits.hpp>	// ä½¿ç”¨ type_traits å…ƒå‡½æ•°è®¡ç®—ç±»å‹
 
-// °ü×°´úÀíÒ»¸öNginxÊı¾İ¶ÔÏó£¬ÊÇÒ»¸ö³éÏóÀà£¬Ö»ÄÜ±»¼Ì³ĞÊ¹ÓÃ
+// åŒ…è£…ä»£ç†ä¸€ä¸ªNginxæ•°æ®å¯¹è±¡ï¼Œæ˜¯ä¸€ä¸ªæŠ½è±¡ç±»ï¼Œåªèƒ½è¢«ç»§æ‰¿ä½¿ç”¨
 template<typename T>
 class NgxWrapper
 {
@@ -14,34 +14,34 @@ public:
 	typedef wrapped_type &		reference_type;
 
 private:
-	pointer_type m_ptr = nullptr;       // Ê¹ÓÃÖ¸Õë±£´æ¶ÔÏó£¬Ä¬ÈÏÊÇ¿ÕÖ¸Õë
+	pointer_type m_ptr = nullptr;       	// ä½¿ç”¨æŒ‡é’ˆä¿å­˜å¯¹è±¡ï¼Œé»˜è®¤æ˜¯ç©ºæŒ‡é’ˆ
 
 
 protected:
-	// ²ÎÊıÊÇÖ¸ÕëÀàĞÍ
+	// å‚æ•°æ˜¯æŒ‡é’ˆç±»å‹
 	NgxWrapper(pointer_type p):m_ptr(p) {}
-	// ²ÎÊıÊÇÒıÓÃÀàĞÍ
+	// å‚æ•°æ˜¯å¼•ç”¨ç±»å‹
 	NgxWrapper(reference_type x):m_ptr(&x) {}
-	// Îö¹¹º¯Êı²»×öÈÎºÎÊÂ(NgxWrapper ²»¸ºÔğ¶ÔÏóµÄÉúÃüÖÜÆÚ¹ÜÀí£¬ÓÉÄÚ´æ³Ø¸ºÔğ)
+	// ææ„å‡½æ•°ä¸åšä»»ä½•äº‹(NgxWrapper ä¸è´Ÿè´£å¯¹è±¡çš„ç”Ÿå‘½å‘¨æœŸç®¡ç†ï¼Œç”±å†…å­˜æ± è´Ÿè´£)
 	~NgxWrapper() = default;
 
 public:
-	pointer_type get() const			// ·ÃÎÊÖ¸Õë³ÉÔ±
+	pointer_type get() const		// è®¿é—®æŒ‡é’ˆæˆå‘˜
 	{
 		return m_ptr;
 	}
 
-	operator bool () const				// ×ªĞÍÎªbool
+	operator bool () const			// è½¬å‹ä¸ºbool
 	{
 		return get();
 	}
 
-	operator pointer_type () const		// ×ªĞÍÎªÖ¸ÕëÀàĞÍ
+	operator pointer_type () const		// è½¬å‹ä¸ºæŒ‡é’ˆç±»å‹
 	{
 		return get();
 	}
 
-	pointer_type operator->() const		// Ö¸Õë²Ù×÷·ûÖØÔØ
+	pointer_type operator->() const		// æŒ‡é’ˆæ“ä½œç¬¦é‡è½½
 	{
 		return get();
 	}
