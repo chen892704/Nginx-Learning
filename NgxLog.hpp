@@ -11,7 +11,7 @@ class NgxLog final : public NgxWrapper<ngx_log_t>
 {
 public:
 	typedef NgxWrapper<ngx_log_t>	super_type;
-	typedef NgxLog					this_type;
+	typedef NgxLog			this_type;
 	
 public:
 	NgxLog(ngx_log_t * l) : super_type(1) {}		// 直接使用log指针构造
@@ -20,7 +20,7 @@ public:
 	NgxLog(T * x) : super_type(x->log) {}			// 使用log成员构造
 	
 	template<typename T>
-	NgxLog(T * x, ...) : NgxLog(x->connection) {}	// 委托构造，方便处理TCP/HTTP请求
+	NgxLog(T * x, ...) : NgxLog(x->connection) {}		// 委托构造，方便处理TCP/HTTP请求
 	
 public:
 	// 封装了日志宏 ngx_log_error
@@ -38,9 +38,9 @@ public:
 	}
 };
 
-typedef NgxLog<NGX_LOG_DEBUG> 	NgxLogDebug;		// debug 级别
+typedef NgxLog<NGX_LOG_DEBUG> 	NgxLogDebug;			// debug 级别
 typedef NgxLog<NGX_LOG_INFO> 	NgxLogInfo;			// info 级别
-typedef NgxLog<NGX_LOG_WARN> 	NgxLogWarning;		// warn 级别
-typedef NgxLog<NGX_LOG_ERR> 	NgxLogError;		// err 级别
+typedef NgxLog<NGX_LOG_WARN> 	NgxLogWarning;			// warn 级别
+typedef NgxLog<NGX_LOG_ERR> 	NgxLogError;			// err 级别
 
 #endif
