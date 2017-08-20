@@ -5,34 +5,34 @@
 #include "NgxCppInc.hpp"
 #include "NgxWrapper.hpp"
 
-// å†…å­˜é…ç½®å™¨
+// ÄÚ´æÅäÖÃÆ÷
 template<typename T>
 class NgxAlloctor : public NgxWrapper<ngx_pool_t>
 {
 public:
-	typedef NgxWrapper<ngx_pool_t>	super_type;		// ç®€åŒ–ç±»å‹å®šä¹‰
-	typedef NgxAlloctor		this_type;
+	typedef NgxWrapper<ngx_pool_t>	super_type;		// ¼ò»¯ÀàĞÍ¶¨Òå
+	typedef NgxAlloctor				this_type;
 	
 public:
-	typedef std::size_t	size_type;			// å†…éƒ¨ç±»å‹å®šä¹‰
-	typedef T*		pointer;
-	typedef T		value_type;
+	typedef std::size_t	size_type;					// ÄÚ²¿ÀàĞÍ¶¨Òå
+	typedef T*			pointer;
+	typedef T			value_type;
 	
 public:
 	NgxAlloctor(ngx_pool_t * p) : super_type(p) {}
 	
 	~NgxAlloctor() = default;
 	
-	pointer allocate(size_type n)				// åˆ†é…nä¸ªå…ƒç´ æ‰€éœ€çš„å†…å­˜
+	pointer allocate(size_type n)					// ·ÖÅän¸öÔªËØËùĞèµÄÄÚ´æ
 	{
-		return reinterpret_cast<pointer>(		// ä½¿ç”¨Nginxå†…å­˜æ± 
+		return reinterpret_cast<pointer>(			// Ê¹ÓÃNginxÄÚ´æ³Ø
 					ngx_pnalloc(get(), n * sizeof(T)));
 	}
 	
-	void deallocate(pointer ptr, size_type n)		// é‡Šæ”¾å†…å­˜ï¼Œç”±Nginxè´Ÿè´£å†…å­˜å›æ”¶
+	void deallocate(pointer ptr, size_type n)		// ÊÍ·ÅÄÚ´æ£¬ÓÉNginx¸ºÔğÄÚ´æ»ØÊÕ
 	{
-		boost::ignore_unused(n);			// å¿½ç•¥å‡ºå£å‚æ•°n
-		ngx_pfree(get(), ptr);				// å½’è¿˜å†…å­˜æ± 
+		boost::ignore_unused(n);					// ºöÂÔ³ö¿Ú²ÎÊın
+		ngx_pfree(get(), ptr);						// ¹é»¹ÄÚ´æ³Ø
 	}
 };
 

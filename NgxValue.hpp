@@ -4,43 +4,43 @@
 #include "Nginx.hpp"
 #include "NgxCppInc.hpp"
 
-// æ— æ•ˆå€¼çš„å°è£…
-class NgxUnsetValue final				// final ç¦æ­¢è¢«ç»§æ‰¿
+// ÎŞĞ§ÖµµÄ·â×°
+class NgxUnsetValue final					// final ½ûÖ¹±»¼Ì³Ğ
 {
 public:
 	template<typename T>
-	operator T () const				// è½¬å‹åˆ°ç±»å‹T
+	operator T () const						// ×ªĞÍµ½ÀàĞÍT
 	{
-		return static_cast<T>(-1);		// ä½¿ç”¨ static_cast è½¬å‹ -1
+		return static_cast<T>(-1);			// Ê¹ÓÃ static_cast ×ªĞÍ -1
 	}
 
 	template<typename T>
-	operator T * () const				// è½¬å‹åˆ°ç±»å‹T*ï¼Œå³æŒ‡é’ˆç±»å‹
+	operator T * () const					// ×ªĞÍµ½ÀàĞÍT*£¬¼´Ö¸ÕëÀàĞÍ
 	{
 		return reinterpret_cast<T*>(-1);
 	}
 
 public:
-	static const NgxUnsetValue & get()		// è·å–å…¨å±€å”¯ä¸€å¯¹è±¡
+	static const NgxUnsetValue & get()		// »ñÈ¡È«¾ÖÎ¨Ò»¶ÔÏó
 	{
-		static NgxUnsetValue const v = {};	// é™æ€å˜é‡ï¼Œç©ºç±»
+		static NgxUnsetValue const v = {};	// ¾²Ì¬±äÁ¿£¬¿ÕÀà
 		return v;
 	}
 };
 
-auto&& ngx_nil = NgxUnsetValue::get();			// å³å€¼å¼•ç”¨ï¼Œåˆ›å»ºåˆ«å
+auto&& ngx_nil = NgxUnsetValue::get();		// ÓÒÖµÒıÓÃ£¬´´½¨±ğÃû
 
 
-// å°è£…å¯¹æ•´æ•°ç±»å‹çš„åŸºæœ¬æ“ä½œ
+// ·â×°¶ÔÕûÊıÀàĞÍµÄ»ù±¾²Ù×÷
 class NgxValue final
 {
 public:
-	NgxValue()  = default;				// é»˜è®¤æ„é€ /ææ„å‡½æ•°
+	NgxValue()  = default;								// Ä¬ÈÏ¹¹Ôì/Îö¹¹º¯Êı
 	~NgxValue() = default;
 
 public:
 	template<typename T>
-	static bool invalid(const T & v)		// æ— æ•ˆå€¼åˆ¤æ–­
+	static bool invalid(const T & v)					// ÎŞĞ§ÖµÅĞ¶Ï
 	{
 		return v == static_cast<T>(NgxUnsetValue::get());
 	}
@@ -50,33 +50,33 @@ public:
 	{
 		if(invalid(x))
 		{
-			x = v;				// å¦‚æœä¸ºæ— æ•ˆå€¼åˆ™åˆå§‹åŒ–
+			x = v;										// Èç¹ûÎªÎŞĞ§ÖµÔò³õÊ¼»¯
 		}
 	}
 
 	template<typename T, typename U, typename V>
-	static void merge(T & c, const U & p, const V & d)	// æ¡ä»¶èµ‹å€¼
+	static void merge(T & c, const U & p, const V & d)	// Ìõ¼ş¸³Öµ
 	{
 		if(invalid(c))
 		{
-			c = invalid(p) ? d : p;			// æ£€æŸ¥p,æ— æ•ˆåˆ™åˆå§‹åŒ–
+			c = invalid(p) ? d : p;						// ¼ì²ép,ÎŞĞ§Ôò³õÊ¼»¯
 		}
 	}
 
 	template<typename T>
-	bool operator==(const T & x, const NgxUnsetValue &)	// ä¸ ngx_nil æ¯”è¾ƒ
+	bool operator==(const T & x, const NgxUnsetValue &)	// Óë ngx_nil ±È½Ï
 	{
 		return NgxValue::invalid(x);
 	}
 
 public:
 	template<typename T, typename ... Args>
-	static void unset(T & v, Args & ... args)		// æ‰¹é‡æœªåˆå§‹åŒ–
+	static void unset(T & v, Args & ... args)			// ÅúÁ¿Î´³õÊ¼»¯
 	{
-		v = NgxUnsetValue::get();			// ç½®ä¸ºæœªåˆå§‹åŒ–çŠ¶æ€
-		unset(args...);					// é€’å½’å¤„ç†å‰©ä½™æ¨¡æ¿å‚æ•°
+		v = NgxUnsetValue::get();						// ÖÃÎªÎ´³õÊ¼»¯×´Ì¬
+		unset(args...);									// µİ¹é´¦ÀíÊ£ÓàÄ£°å²ÎÊı
 
-		static void unset() {}				// é€’å½’ç»ˆç»“å‡½æ•°
+		static void unset() {}							// µİ¹éÖÕ½áº¯Êı
 	}
 };
 

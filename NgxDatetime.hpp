@@ -4,7 +4,7 @@
 #include "Nginx.hpp"
 #include "NgxCppInc.hpp"
 
-// Nginxçš„æ—¥æœŸåŠŸèƒ½å°è£…
+// NginxµÄÈÕÆÚ¹¦ÄÜ·â×°
 class NgxDatetime final
 {
 public:
@@ -12,26 +12,26 @@ public:
 	~NgxDatetime() = default;
 	
 public:
-	static ngx_str_t since()			// å°è£… ngx_time()
+	static ngx_str_t since()			// ·â×° ngx_time()
 	{
 		return ngx_time();
 	}
 	
-	static ngx_str_t today()			// è·å–å½“å‰æ—¥æœŸ
+	static ngx_str_t today()			// »ñÈ¡µ±Ç°ÈÕÆÚ
 	{
 		ngx_tm_t tm;
 		
-		ngx_localtime(since(), &tm);		// è½¬æ¢ä¸ºæœ¬åœ°æ—¶é—´
+		ngx_localtime(since(), &tm);	// ×ª»»Îª±¾µØÊ±¼ä
 		
-		static u_char buf[20] = {};		// é™æ€å­—ç¬¦æ•°ç»„ç”¨ä½œè¾“å‡º
-							// æ ¼å¼åŒ–ä¸º yyyy-mm-ddï¼Œè·å–å­—ç¬¦ä¸²æœ«å°¾
+		static u_char buf[20] = {};		// ¾²Ì¬×Ö·ûÊı×éÓÃ×÷Êä³ö
+										// ¸ñÊ½»¯Îª yyyy-mm-dd£¬»ñÈ¡×Ö·û´®Ä©Î²
 		auto p = ngx_snprintf(buf, 20, "%d-%02d-%02d",
-					tm.ngx_tm_year, tm.ngx_tm_mon, tm.ngx_tm_mday);
+								tm.ngx_tm_year, tm.ngx_tm_mon, tm.ngx_tm_mday);
 								
 		return ngx_str_t{staic_cast<std::size_t>(p - buf), buf};
 	}
 	
-	static ngx_str_t http(std::time_t t = since())	// æ—¶é—´æˆ³è½¬æ—¥æœŸå­—ç¬¦ä¸²
+	static ngx_str_t http(std::time_t t = since())		// Ê±¼ä´Á×ªÈÕÆÚ×Ö·û´®
 	{
 		static u_char buf[50] = {};
 		
@@ -40,7 +40,7 @@ public:
 		return ngx_str_t{static_cast<std::size_t>(p - buf), buf};
 	}
 	
-	static std::time_t http(ngx_str_t & str)	// æ—¥æœŸå­—ç¬¦ä¸²è½¬æ—¶é—´æˆ³
+	static std::time_t http(ngx_str_t & str)			// ÈÕÆÚ×Ö·û´®×ªÊ±¼ä´Á
 	{
 		return ngx_parse_http_time(str.data, str.len);
 	}

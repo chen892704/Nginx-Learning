@@ -4,42 +4,42 @@
 #include "Nginx.hpp"
 #include "NgxCppInc.hpp"
 
-// Nginxçš„æ—¶é—´åŠŸèƒ½å°è£…
+// NginxµÄÊ±¼ä¹¦ÄÜ·â×°
 class NgxClock final
 {
 public:
-	NgxClock() = default;
+	NgxClock()  = default;
 	~NgxClock() = default;
 	
 private:
-	ngx_time_t m_time = now();		// åˆå§‹åŒ–ä¸ºå½“å‰æ—¶é—´
+	ngx_time_t m_time = now();			// ³õÊ¼»¯Îªµ±Ç°Ê±¼ä
 	
 public:
-	static const ngx_time_t & now()		// è·å–å½“å‰æ—¶é—´
+	static const ngx_time_t & now()		// »ñÈ¡µ±Ç°Ê±¼ä
 	{
-		ngx_time_update();		// æ›´æ–°ç¼“å­˜æ—¶é—´
+		ngx_time_update();				// ¸üĞÂ»º´æÊ±¼ä
 		
-		return * ngx_timeofday();	// è·å–ç¼“å­˜æ—¶é—´
+		return * ngx_timeofday();		// »ñÈ¡»º´æÊ±¼ä
 	}
 	
-	ngx_time_t delta() const		// è®¡ç®—æµé€çš„æ—¶é—´
+	ngx_time_t delta() const			// ¼ÆËãÁ÷ÊÅµÄÊ±¼ä
 	{
-		auto t = now();			// è·å–å½“å‰æ—¶é—´
+		auto t = now();					// »ñÈ¡µ±Ç°Ê±¼ä
 		
-		t.sec -= m_time.sec;		// è®¡ç®—å·®å€¼
+		t.sec -= m_time.sec;			// ¼ÆËã²îÖµ
 		t.msec -= m_time.msec;
 		
 		return t;
 	}
 	
-	double elapsed() const			// è¿”å›æµ®ç‚¹æ•°æ ¼å¼çš„æ—¶é—´
+	double elapsed() const				// ·µ»Ø¸¡µãÊı¸ñÊ½µÄÊ±¼ä
 	{
-		auto t = delta();		// è®¡ç®—æµé€çš„æ—¶é—´
-						// è½¬æ¢ä¸º double
+		auto t = delta();				// ¼ÆËãÁ÷ÊÅµÄÊ±¼ä
+										// ×ª»»Îª double
 		return t.sec + t.msec * 1.0 / 1000;
 	}
 	
-	void reset()				// å¤ä½è®¡æ—¶å™¨
+	void reset()						// ¸´Î»¼ÆÊ±Æ÷
 	{
 		m_time = now();
 	}
