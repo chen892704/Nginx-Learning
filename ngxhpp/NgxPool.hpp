@@ -131,6 +131,18 @@ public:
 		
 		return p;
 	}
+public:
+	ngx_buf_t* buffer(std::size_t n = 0) const		// 创建缓冲区
+	{
+		auto tmp = n > 0 ?
+		ngx_create_temp_buf(get(), n) : 
+		alloc<ngx_buf_t>()				// ngx_calloc_buf(get())
+		;
+
+		NgxException::require(tmp); 			// 检查空指针
+
+		return tmp;
+	}
 };
 
 #endif
