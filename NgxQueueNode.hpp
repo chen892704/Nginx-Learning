@@ -14,7 +14,7 @@ class NgxQueueNode : public NgxWrapper<ngx_queue_t>
 {
 public:
 	typedef NgxWrapper<ngx_queue_t>		super_type;
-	typedef NgxQueueNode				this_type;
+	typedef NgxQueueNode			this_type;
 	
 public:
 	NgxQueueNode(ngx_queue_t * ptr) : super_type(ptr) {}	// 直接指针构造
