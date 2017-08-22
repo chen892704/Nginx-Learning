@@ -6,19 +6,19 @@
 #include "NgxWrapper.hpp"
 
 // 使用成员变量指针封装了 ngx_rbtree_t
-template<typename T,								// 节点数据类型
-		ngx_rbtree_node_t T::* np,					// 红黑树节点成员函数指针
-		ngx_rbtree_insert_pt func					// 插入方法函数指针
+template<typename T,						// 节点数据类型
+		ngx_rbtree_node_t T::* np,			// 红黑树节点成员函数指针
+		ngx_rbtree_insert_pt func			// 插入方法函数指针
 		>
 class NgxRbtree final : public NgxWrapper<ngx_rbtree_t>
 {
 public:
 	typedef NgxWrapper<ngx_rbtree_t>	super_type;
-	typedef NgxRbtree					this_type;
+	typedef NgxRbtree			this_type;
 	
-	typedef ngx_rbtree_key_t			key_type;
-	typedef ngx_rbtree_t				tree_type;
-	typedef ngx_rbtree_node_t			node_type;
+	typedef ngx_rbtree_key_t		key_type;
+	typedef ngx_rbtree_t			tree_type;
+	typedef ngx_rbtree_node_t		node_type;
 	
 public:
 	NgxRbtree(tree_type * t) : super_type(t) {}
@@ -31,32 +31,32 @@ public:
 		ngx_rbtree_init(&tree, &s, func);
 	}
 	
-	bool empty() const									// 判断红黑树是否为空
+	bool empty() const					// 判断红黑树是否为空
 	{
 		return get()->root == get()->sentinel;
 	}
 	
-	void add(T & v) const								// 插入节点
+	void add(T & v) const					// 插入节点
 	{
 		ngx_rbtree_insert(get(), &(v.*np));
 	}
 	
-	void del(T & v) const								// 删除节点
+	void del(T & v) const					// 删除节点
 	{
 		ngx_rbtree_delete(get(), &(v.*np));
 	}
 	
-	key_type min_key() const							// 查找最小节点，返回键值，通常是整数
+	key_type min_key() const				// 查找最小节点，返回键值，通常是整数
 	{
 		auto p = ngx_rbtree_min(get()->root, get()->sentinel);
 		return p->key;
 	}
 	
-	T & min() const										// 查找最小节点，返回实际的节点类型
+	T & min() const							// 查找最小节点，返回实际的节点类型
 	{
 		auto p = ngx_rbtree_min(get()->root, get()->sentinel);
 		constexpr auto offset = (std::size_t)&(((T*)0)->*np);	// 计算偏移量
-		return *(T*)((u_char*)(p) - offset);					// 类型转换
+		return *(T*)((u_char*)(p) - offset);			// 类型转换
 	}
 
 private:
@@ -75,9 +75,9 @@ private:
 	
 public:
 	template<typename F>
-	void traverse(F f) const							// 中序遍历，传入一个函数对象
+	void traverse(F f) const					// 中序遍历，传入一个函数对象
 	{
-		do_traverse(get()->root, f);					// 传入根节点，开始遍历
+		do_traverse(get()->root, f);				// 传入根节点，开始遍历
 	}
 };
 
