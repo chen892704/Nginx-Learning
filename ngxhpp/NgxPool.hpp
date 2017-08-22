@@ -143,6 +143,23 @@ public:
 
 		return tmp;
 	}
+	
+	ngx_chain_t * chain() const				// 创建一个空节点
+	{
+		auto p = ngx_alloc_chain_link(get());
+		
+		NgxException::require(p);
+		return p;
+	}
+	
+	ngx_chain_t * chain(const ngx_bufs_t & bufs) const	// 创建多个节点
+	{
+		auto p = ngx_create_chain_of_bufs(get(), 
+						const_cast<ngx_bufs_t*>(&bufs);
+		
+		NgxException::require(p);
+		return p;
+	}
 };
 
 #endif
