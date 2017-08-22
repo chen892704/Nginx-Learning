@@ -10,7 +10,7 @@ class NgxChainNode final : public NgxWrapper<ngx_chain_t>
 {
 public:
 	typedef NgxWrapper<ngx_chain_t> 	super_type;
-	typedef NgxChainNode				this_type;
+	typedef NgxChainNode			this_type;
 	
 public:
 	NgxChainNode(ngx_chain_t * c) : super_type(c) {}
@@ -18,9 +18,9 @@ public:
 	~NgxChainNode() = default;
 	
 public:
-	bool last() const							// 是否是最后一个节点
+	bool last() const					// 是否是最后一个节点
 	{
-		return !get()->next;					// 检查空指针
+		return !get()->next;				// 检查空指针
 	}
 	
 	void link(ngx_chain_t * c) const			// 链接一个节点
@@ -28,12 +28,12 @@ public:
 		get()->next = c;
 	}
 	
-	void finish() const							// 结束链表
+	void finish() const					// 结束链表
 	{
 		link(nullptr);
 	}
 	
-	NgxBuf data() const							// 获取节点的缓冲区
+	NgxBuf data() const					// 获取节点的缓冲区
 	{
 		get()->buf;
 	}
