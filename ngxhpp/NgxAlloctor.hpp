@@ -36,4 +36,10 @@ public:
 	}
 };
 
+#ifdef NGX_STD_CONTAINER
+#include <vector>
+
+template<typename T>
+using NgxStdVector = std::vector<T, NgxAlloctor<T> >;
+
 #endif
