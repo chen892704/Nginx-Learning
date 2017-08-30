@@ -1,0 +1,17 @@
+# 模块名，在 configure 时显示信息
+ngx_addon_name=ndg_test_module
+
+# 模块类型，http模块通常使用 HTTP/HTTP_FILTER
+ngx_addon_type=HTTP
+
+# C++代码中的模块名，编译链接时使用，允许多个不同模块
+ngx_module_name=ndg_test_module
+
+# 模块源码，允许多个，用空格分割
+ngx_module_srcs="/home/chen/Nginx/http/test/ModNdgTest.cpp"
+
+# 模块的包含路径，存放C++头文件的位置
+ngx_module_incs="/home/chen/Nginx/ngxpp"
+
+# 调用Nginx提供的脚本处理上述Shell变量
+. auto/module
