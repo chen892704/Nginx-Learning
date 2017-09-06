@@ -1,6 +1,7 @@
 #include <iostream>
 #include "NgxAll.hpp"
 
+// 配置结构体
 struct NdgTestConf final
 {
 	ngx_flag_t enabled = ngx_nil;			// 标志变量，构造时初始化
@@ -10,10 +11,10 @@ struct NdgTestConf final
 static ngx_command_t ndg_test_cmds[] = 			// 配置指令数组
 {
 	{
-		ngx_string("ngd_test"),			// 指令的名字
-		NGX_HTTP_LOC_CONF | NGX_CONF_FLAG,	// 指令的作用域和类型
-		ngx_conf_set_flag_slot,			// 解析函数指针
-		NGX_HTTP_LOC_CONF_OFFSET,		// 数据的存储位置
+		ngx_string("ngd_test"),			// 指令名
+		NGX_HTTP_LOC_CONF | NGX_CONF_FLAG,	// 允许指令出现在 location 域，并且参数取值为 on|off
+		ngx_conf_set_flag_slot,			// 预定义解析函数，处理值 on|off 转化为数字 1|0
+		NGX_HTTP_LOC_CONF_OFFSET,		// 可以出现在 location 块里
 		offsetof(NdgTestConf, enabled),		// 数据的具体存储变量
 		nullptr
 	},
