@@ -30,11 +30,10 @@ NgxRbtree       | wrapper for nginx ngx_rbtree_t.
 
 
   
-  **module**  
-  
-###http/test  
-  
-  
+**module**  
+设计文档  
+http/test  
+    
 - 模块名：	ndg_test_module
 - 配置指令：ndg_test on|off		开关模块功能只能在 location里配置
 - 使用 ngx_command_t 和相关函数解析配置指令
